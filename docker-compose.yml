@@ -1,0 +1,82 @@
+version: '3'
+services:
+
+  nginx:
+    image: "nginx:latest"
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./conf/nginx/conf.d:/etc/nginx/conf.d
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - review-net
+      - ldap-net
+    depends_on:
+      - review
+
+  review:
+    image: gerritcodereview/gerrit
+    restart: unless-stopped
+    ports:
+      - "29418:29418"
+    expose:
+      - 8080
+      - 29418
+    depends_on:
+      - ldap
+    volumes: # note: for better performance, you could replace the docker aufs: https://hub.docker.com/r/gerritcodereview/gerrit
+       - review_git_volume:/var/gerrit/git
+       - review_index_volume:/var/gerrit/index
+       - review_cache_volume:/var/gerrit/cache
+       - review_db:/var/gerrit/db
+       - ./conf/gerrit/etc:/var/gerrit/etc
+    environment:
+      - CANONICAL_WEB_URL=http://review.firmenessen.de
+      - LDAP_ADMIN_PASSWORD=${ADMIN_PASSWORD}
+    # command: init
+    networks:
+      - review-net
+      - ldap-net
+
+
+  ldap:
+    build: ./ldap
+    restart: unless-stopped
+    expose:
+      - 389
+      - 636
+    environment: # username: cn=admin,dc=example,dc=org
+      - LDAP_ADMIN_PASSWORD=${ADMIN_PASSWORD}
+    volumes:
+      - ldap:/var/lib/ldap
+      - ldap-conf:/etc/ldap/slapd.d
+    networks:
+      - ldap-net
+
+
+  ldap-admin:
+    image: osixia/phpldapadmin
+    restart: unless-stopped
+    expose:
+      - 443
+    environment:
+      - PHPLDAPADMIN_LDAP_HOSTS=ldap
+      - PHPLDAPADMIN_HTTPS=false 
+    networks:
+      - ldap-net
+  
+
+volumes:
+  review_git_volume:
+  review_index_volume:
+  review_cache_volume:
+  review_db:
+  ldap:
+  ldap-conf:
+
+
+networks:
+  review-net:
+  ldap-net:
+  
