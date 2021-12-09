@@ -33,3 +33,7 @@ Delete all volumes (for a fresh start by)
 ```
 docker-compose down -v
 ```
+
+## Thank you
+
+* https://github.com/openfrontier/docker-gerrit

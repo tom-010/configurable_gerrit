@@ -1,0 +1,10 @@
+
+
+cd /home/
+git clone /var/gerrit/git/All-Projects.git
+cd All-Projects/
+vi project.config 
+git add .
+git commit -am "new initial config, provided by the container"
+cd All-Projects/
+git push /var/gerrit/git/All-Projects.git HEAD:refs/meta/config

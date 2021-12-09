@@ -16,7 +16,7 @@ services:
       - review
 
   review:
-    image: gerritcodereview/gerrit
+    build: './gerrit'
     restart: unless-stopped
     ports:
       - "29418:29418"
