@@ -34,6 +34,14 @@ Delete all volumes (for a fresh start by)
 docker-compose down -v
 ```
 
+## The project.config
+
+Please note that the `project.config` allows EVERYTHING to every 
+registered user. The best strategy to create your own is to delete 
+it, go to gerrit > `Repositories` > `All Projects` > `Access` > `Edit`. 
+Then Go to `Repositories` > `All Projects` > `Browse`, select the 
+last commit, open project.config and use that.
+
 ## Thank you
 
 * https://github.com/openfrontier/docker-gerrit
