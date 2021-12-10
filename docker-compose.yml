@@ -31,6 +31,7 @@ services:
        - review_cache_volume:/var/gerrit/cache
        - review_db:/var/gerrit/db
        - ./conf/gerrit/etc:/var/gerrit/etc
+       - ./conf/gerrit/plugins:/plugins
     environment:
       - CANONICAL_WEB_URL=http://review.firmenessen.de
       - LDAP_ADMIN_PASSWORD=${ADMIN_PASSWORD}

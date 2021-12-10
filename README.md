@@ -42,6 +42,18 @@ it, go to gerrit > `Repositories` > `All Projects` > `Access` > `Edit`.
 Then Go to `Repositories` > `All Projects` > `Browse`, select the 
 last commit, open project.config and use that.
 
+## Plugins 
+
+Download the (.jar) plugins from [gerritforge](https://gerrit-ci.gerritforge.com/) and 
+place them into `conf/gerrit/plugins` (which is mounted in the `docker-compose.yml`).
+They will be loaded on container-startup.
+
+If you don't want to stop the container after adding a plugin, you can also do
+1. `docker exec -it configurable_gerrit_review_1 /bin/bash`
+2. `ln -s /plugins/* /var/gerrit/plugins/ 2> /dev/null || true` (see `entrypoint-override.sh`) 
+
+As soon as a plugin is added, it will update automatically, if you override it.
+
 ## Thank you
 
 * https://github.com/openfrontier/docker-gerrit
