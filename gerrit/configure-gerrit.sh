@@ -20,4 +20,14 @@ git add .
 git commit -am "auto-config from project.config"
 git push /var/gerrit/git/All-Projects.git HEAD:refs/meta/config
 
+echo $LDAP_ADMIN_PASSWORD
+echo "username=gerritadmin&password=$LDAP_ADMIN_PASSWORD&rememberme=1"
+
+# make gerritadmin the admin by logging in first
+# (the first user that logs into gerrit becomes admin by convention)
+curl -s \
+    -d "username=gerritadmin&password=$LDAP_ADMIN_PASSWORD&rememberme=1" \
+    -H "Content-Type: application/x-www-form-urlencoded" \
+    -X POST http://localhost:8080/login/%2Fq%2Fstatus%3Aopen%2B-is%3Awip
+
 echo "Gerrit configured"
